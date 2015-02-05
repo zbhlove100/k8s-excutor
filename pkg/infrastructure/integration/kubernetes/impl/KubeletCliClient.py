@@ -4,10 +4,11 @@ from pkg.infrastructure.integration.kubernetes.dao import KubernetesCommandDao
 from pkg.infrastructure.common.shell.SimpleCmdExecutor import SimpleCmdExecutor
 
 class KubeletCliClient(IKubernetesClient):
-    def __init__(self):
+    def __init__(self,KComandDao):
+        self.KCommandDao = KubernetesCommandDao
         pass
     def createResource(self,filePath):
-        cmd = KubernetesCommandDao.getCreateCommand(filePath)
+        cmd = self.KCommandDao.getCreateCommand(filePath)
         self.operationResponse = SimpleCmdExecutor.executeCmd(cmd)
         return self.operationResponse
 
@@ -38,16 +39,16 @@ class KubeletCliClient(IKubernetesClient):
         return result
 
     def deletePod(self, podname):
-        cmd = KubernetesCommandDao.getDeleteCommand("pod",podname)
+        cmd = self.KCommandDao.getDeleteCommand("pod",podname)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
     def queryPod(self,podname):
-        cmd = KubernetesCommandDao.getQueryCommand("pod",podname)
+        cmd = self.KCommandDao.getQueryCommand("pod",podname)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
     def queryPodStatus(self,podname):
-        cmd = "%s|awk '{print $5}'" % KubernetesCommandDao.getQueryCommand("pod",podname)
+        cmd = "%s|awk '{print $5}'" % self.KCommandDao.getQueryCommand("pod",podname)
 
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         resultArray = outputresult.splitlines()
@@ -57,21 +58,21 @@ class KubeletCliClient(IKubernetesClient):
         return result
 
     def deleteService(self, servicename):
-        cmd = KubernetesCommandDao.getDeleteCommand("service",servicename)
+        cmd = self.KCommandDao.getDeleteCommand("service",servicename)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
     def queryService(self,servicename):
-        cmd = KubernetesCommandDao.getQueryCommand("service",servicename)
+        cmd = self.KCommandDao.getQueryCommand("service",servicename)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
     def deleteReplication(self, replicationname):
-        cmd = KubernetesCommandDao.getDeleteCommand("replication", replicationname)
+        cmd = self.KCommandDao.getDeleteCommand("replication", replicationname)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
     def queryReplication(self,replicationname):
-        cmd = KubernetesCommandDao.getQueryCommand("replication", replicationname)
+        cmd = self.KCommandDao.getQueryCommand("replication", replicationname)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult

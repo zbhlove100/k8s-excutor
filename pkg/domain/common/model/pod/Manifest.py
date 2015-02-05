@@ -10,15 +10,15 @@ class Manifest(object):
                  #, UUID=None
                  , volumes=None
                  , containers=None
-                 , restartPolicy=None
-                 # ,dNSPolicy=None
+                 #, restartPolicy=None
+                 #, dNSPolicy=None
     ):
         self.version = version
         self.id = id
         # self.UUID = UUID
         self.volumes = volumes
         self.containers = containers
-        self.restartPolicy = restartPolicy
+        #self.restartPolicy = restartPolicy
         #self.dNSPolicy = dNSPolicy
         pass
 
@@ -33,7 +33,7 @@ class Manifest(object):
 
     def toDict(self):
         manifestDict = {}
-        paramList = ['version', 'id', 'volumes', 'containers', 'restartPolicy']
+        paramList = ['version', 'id', 'volumes', 'containers']
         for p in paramList:
             if None != self.__dict__[p]:
                 if p == "containers":
@@ -50,4 +50,28 @@ class Manifest(object):
         manifest_dict = self.toDict()
         manifest_json = json.dumps(manifest_dict, indent=2)
         return manifest_json
+
+    def setVersion(self,version):
+        self.version = version
+
+    def setId(self,id):
+        self.id = id
+
+    def setVolumes(self,volumes):
+        self.volumes = volumes
+
+    def setContainers(self,containers):
+        self.containers = containers
+
+    def getVersion(self):
+        return self.manifest
+
+    def getId(self):
+        return self.id
+
+    def getVolumes(self):
+        return self.volumes
+
+    def getContainers(self):
+        return self.Containers
 

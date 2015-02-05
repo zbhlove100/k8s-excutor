@@ -5,17 +5,19 @@ from pkg.domain.common.model.replicationController.ReplicationControllerState im
 from pkg.domain.common.model.replicationController.ReplicationController import ReplicationController
 from pkg.domain.common.model.replicationController.PodTemplate import PodTemplate
 from pkg.domain.common.model.pod.PodState import PodState
-from pkg.infrastructure.common.generateConfig import GenerateConfig
+from pkg.domain.common.bl.impl.generateConfig import GenerateConfig
 from pkg.domain.common.model.pod.Pod import Pod
 from pkg.domain.common.model.service.Service import Service
 from pkg.infrastructure.common.file.FileUtil import FileUtil
-from pkg.infrastructure.common.namespace.Namespace import Namespace
+from pkg.infrastructure.common.identification import UuidUtil
+
+
 class CreateWordpress(object):
 
     def __init__(self):
         pass
     def createWdpReplicationConfig(self):
-        namespace = Namespace()
+        namespace = UuidUtil()
         uuid = namespace.getUuidName()
         uuidname = "%s-%s" % ("wordpressrc",uuid)
         containers = Containers(name=uuidname,image="zbhlove/wordpress",command=["apache2-foreground","10.0.195.8:3306","cloudpi"], ports=[{"containerPort": 80,}],cpu=200)
@@ -31,7 +33,7 @@ class CreateWordpress(object):
         podconfig.generateJsonFile();
         return path, uuidname
     def createMysqlPodConfig(self):
-        namespace = Namespace()
+        namespace = UuidUtil()
         uuid = namespace.getUuidName()
         uuidname = "%s-%s" % ("mysqlpod",uuid)
         containers  = Containers(name=uuidname,image="zbhlove100/mysql5.6", ports=[{"containerPort": 3306,}],env=[{"name":"MYSQL_ROOT_PASSWORD","value":"cloudpi"}])
@@ -44,7 +46,7 @@ class CreateWordpress(object):
         podconfig.generateJsonFile();
         return path,uuidname
     def createMysqlServiceConfig(self,selectLabel):
-        namespace = Namespace()
+        namespace = UuidUtil()
         uuid = namespace.getUuidName()
         uuidname = "%s-%s" % ("mysqlservice",uuid)
         service = Service(id=uuidname,kind="service",apiVersion="v1beta2",selector={"name": selectLabel},protocol="TCP",containerPort=3306,port=3306)
@@ -54,7 +56,7 @@ class CreateWordpress(object):
         podconfig.generateJsonFile();
         return path, uuidname
     def createWdpServiceConfig(self,selectLabel):
-        namespace = Namespace()
+        namespace = UuidUtil()
         uuid = namespace.getUuidName()
         uuidname = "%s-%s" % ("wordpressservice",uuid)
         publicIp = "10.185.135.164"
@@ -68,7 +70,7 @@ class CreateWordpress(object):
 
     def createTasks(self):
         conponents = []
-        namespace = Namespace()
+        namespace = UuidUtil()
         uuid = namespace.getUuidName()
         databaseFile = "%s-%s" % ("taskMessage",uuid)
         databaseFilePath = "/tmp/%s.json" % databaseFile

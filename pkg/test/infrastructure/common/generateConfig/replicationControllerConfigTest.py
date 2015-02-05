@@ -7,7 +7,7 @@ from pkg.domain.common.model.replicationController.ReplicationControllerState im
 from pkg.domain.common.model.replicationController.ReplicationController import ReplicationController
 from pkg.domain.common.model.replicationController.PodTemplate import PodTemplate
 from pkg.domain.common.model.pod.PodState import PodState
-from pkg.infrastructure.common.generateConfig import GenerateConfig
+from pkg.domain.common.bl.impl.generateConfig import GenerateConfig
 from pkg.infrastructure.common.file.FileUtil import FileUtil
 
 

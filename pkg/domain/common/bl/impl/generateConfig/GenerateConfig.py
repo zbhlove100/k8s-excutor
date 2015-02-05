@@ -4,15 +4,15 @@ from pkg.domain.common.model.pod.Pod import Pod
 from pkg.infrastructure.common.file.FileUtil import FileUtil
 class GenerateConfig(object):
 
-    def __init__(self,obj,path):
+    def __init__(self,obj,configDao):
         self.obj = obj
-        self.path = path
+        self.configDao = configDao
         pass
 
-    def generateJsonFile(self):
+    def generateJson(self):
         podJson = self.obj.toJSON()
-        FileUtil.writeContent(self.path, podJson)
-        pass
+        filePath = self.configDao.setObj(podJson)
+        return filePath
 
-    def generateYAMLFile(self):
+    def generateYAML(self):
         pass
