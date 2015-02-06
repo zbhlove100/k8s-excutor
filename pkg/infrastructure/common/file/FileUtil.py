@@ -29,7 +29,7 @@ class FileUtil(object):
         file_content = ""
         file_lines = config_file.readlines();
         for line in file_lines :
-            file_content = file_content + line
+            file_content = file_content + line.strip()
         config_file.close()
         return file_content
     

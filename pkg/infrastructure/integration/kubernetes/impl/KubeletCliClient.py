@@ -1,78 +1,87 @@
 __author__ = 'zhangbohan'
 from pkg.infrastructure.integration.kubernetes.IKubernetesClient import IKubernetesClient
 from pkg.infrastructure.integration.kubernetes.dao import KubernetesCommandDao
+from pkg.infrastructure.common.generateConfig.GenerateConfig import GenerateConfig
 from pkg.infrastructure.common.shell.SimpleCmdExecutor import SimpleCmdExecutor
 
 class KubeletCliClient(IKubernetesClient):
     def __init__(self,KComandDao):
-        self.KCommandDao = KubernetesCommandDao
+        self.KCommandDao = KComandDao
         pass
-    def createResource(self,filePath):
-        cmd = self.KCommandDao.getCreateCommand(filePath)
+    def createResource(self, objModel):
+        generator = GenerateConfig(objModel, self.configDao)
+        podConfigFile = generator.generateJson()
+        cmd = self.KCommandDao.getCreateCommand(podConfigFile)
         self.operationResponse = SimpleCmdExecutor.executeCmd(cmd)
         return self.operationResponse
 
-    def deleteResource(self,paramMap):
-        kind = paramMap.kind
-        name = paramMap.name
+    def deleteResource(self, objModel):
+        kind = objModel.kind
         result = ""
         if "pod" == kind:
-            result = self.deletePod(name)
+            result = self.deletePod(objModel)
         elif "service" == kind:
-            result = self.deleteService(name)
+            result = self.deleteService(objModel)
         elif "replication" == kind:
-            result = self.deleteReplication(name)
+            result = self.deleteReplication(objModel)
 
         return result
 
-    def querryResource(self,paramMap):
-        kind = paramMap.kind
-        name = paramMap.name
+    def querryResource(self, objModel):
+        kind = objModel.kind
         result = ""
         if "pod" == kind:
-            result = self.queryPodStatus(name)
+            result = self.queryPodStatus(objModel)
         elif "service" == kind:
-            result = self.queryService(name)
+            result = self.queryService(objModel)
         elif "replication" == kind:
-            result = self.queryReplication(name)
+            result = self.queryReplication(objModel)
 
         return result
 
-    def deletePod(self, podname):
-        cmd = self.KCommandDao.getDeleteCommand("pod",podname)
+    def deletePod(self, podModel):
+        podId = podModel.getId()
+        cmd = self.KCommandDao.getDeleteCommand("pod",podId)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
-    def queryPod(self,podname):
-        cmd = self.KCommandDao.getQueryCommand("pod",podname)
+    def queryPod(self,podModel):
+        podId = podModel.getId()
+        cmd = self.KCommandDao.getQueryCommand("pod",podId)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
-    def queryPodStatus(self,podname):
-        cmd = "%s|awk '{print $5}'" % self.KCommandDao.getQueryCommand("pod",podname)
+
+    def queryPodStatus(self,podModel):
+        podId = podModel.getId()
+        cmd = "%s|awk '{print $5}'" % self.KCommandDao.getQueryCommand("pod",podId)
 
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         resultArray = outputresult.splitlines()
-        result = {"name":podname,"status":"Error"}
+        result = {"name":podId,"status":"Error"}
         if resultArray[1]:
             result.status = resultArray[1]
         return result
 
-    def deleteService(self, servicename):
-        cmd = self.KCommandDao.getDeleteCommand("service",servicename)
+    def deleteService(self, serviceModel):
+        serviceId = serviceModel.getId()
+        cmd = self.KCommandDao.getDeleteCommand("service",serviceId)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
-    def queryService(self,servicename):
-        cmd = self.KCommandDao.getQueryCommand("service",servicename)
+    def queryService(self,serviceModel):
+        serviceId = serviceModel.getId()
+        cmd = self.KCommandDao.getQueryCommand("service",serviceId)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
-    def deleteReplication(self, replicationname):
-        cmd = self.KCommandDao.getDeleteCommand("replication", replicationname)
+    def deleteReplication(self, replicationControllerModel):
+        replicationControllerModelId = replicationControllerModel.getId()
+        cmd = self.KCommandDao.getDeleteCommand("replication", replicationControllerModelId)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
-    def queryReplication(self,replicationname):
-        cmd = self.KCommandDao.getQueryCommand("replication", replicationname)
+    def queryReplication(self,replicationControllerModel):
+        replicationControllerModelId = replicationControllerModel.getId()
+        cmd = self.KCommandDao.getQueryCommand("replication", replicationControllerModelId)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult

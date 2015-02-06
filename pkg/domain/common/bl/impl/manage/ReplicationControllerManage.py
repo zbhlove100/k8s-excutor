@@ -1,5 +1,5 @@
 __author__ = 'zhangbohan'
-from pkg.domain.common.bl.impl.generateConfig import GenerateConfig
+from pkg.infrastructure.common.generateConfig import GenerateConfig
 from pkg.domain.common.dao.JsonFileDao import JsonFileDao
 
 

@@ -5,7 +5,7 @@ from pkg.domain.common.model.pod.Pod import Pod
 from pkg.domain.common.model.pod.Manifest import Manifest
 from pkg.domain.common.model.pod.Containers import Containers
 from pkg.domain.common.model.pod.PodState import PodState
-from pkg.domain.common.bl.impl.generateConfig import GenerateConfig
+from pkg.infrastructure.common.generateConfig import GenerateConfig
 from pkg.infrastructure.common.file.FileUtil import FileUtil
 
 

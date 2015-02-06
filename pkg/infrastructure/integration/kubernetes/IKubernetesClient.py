@@ -1,11 +1,11 @@
 __author__ = 'zhangbohan'
 
 class IKubernetesClient(object):
-    def createResource(self,filePath):
+    def createResource(self,objModel):
         return self.operationResponse
 
-    def deleteResource(self,paramMap):
+    def deleteResource(self,objModel):
         return self.operationResponse
 
-    def querryResource(self,paramMap):
+    def querryResource(self,objModel):
         return self.operationResponse
