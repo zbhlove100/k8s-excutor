@@ -6,9 +6,6 @@ Created on Jan 9, 2013
 import logging
 import os
 
-from infrastructure.common.logger.AutoopsLoggerFactory import AutoopsLoggerFactory
-from infrastructure.common.logger.RMLoggerFactory import RMLoggerFactory
-from infrastructure.common.logger.RMMemoryLoggerFactory import RMMemoryLoggerFactory
 
 class LoggerFactory(object):
     '''

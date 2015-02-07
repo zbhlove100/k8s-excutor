@@ -5,7 +5,7 @@ from pkg.infrastructure.common.identification.UuidUtil import  UuidUtil
 
 
 class JsonFileDao(object):
-    def __init__(self,filePathDir=None):
+    def __init__(self, filePathDir=None):
         if None == filePathDir:
             self.filePathDir = "/tmp/"
         else:

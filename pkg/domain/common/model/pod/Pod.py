@@ -3,10 +3,11 @@ import json
 class Pod(object):
 
     def __init__(self
-                ,id=None
-                ,apiVersion=None
-                ,desiredState=None
-                ,labels=None
+                ,id
+                ,apiVersion
+                ,desiredState
+                ,labels
+                ,namespace
 
     ):
         self.id = id
@@ -14,6 +15,7 @@ class Pod(object):
         self.apiVersion = apiVersion
         self.desiredState = desiredState
         self.labels = labels
+        self.namespace = namespace
         pass
 
     @staticmethod
@@ -30,7 +32,8 @@ class Pod(object):
             "apiVersion" : self.apiVersion,
             "kind" : self.kind,
             "desiredState" : self.desiredState.toDict(),
-            "labels" : self.labels
+            "labels" : self.labels,
+            "namespace": self.namespace
         }
 
 
@@ -53,14 +56,23 @@ class Pod(object):
     def setLabels(self,labels):
         self.labels = labels
 
-    def getId(self,id):
+    def getId(self):
         return self.id
 
-    def getApiVersion(self,apiVersion):
+    def getApiVersion(self):
         return self.apiVersion
 
-    def getDesiredState(self,desiredState):
+    def getDesiredState(self):
         return self.desiredState
 
-    def getLabels(self,labels):
+    def getLabels(self):
         return self.labels
+
+    def getKind(self):
+        return self.kind
+
+    def setNamespace(self,namespace):
+        self.namespace = namespace
+
+    def getNamespace(self):
+        return self.namespace

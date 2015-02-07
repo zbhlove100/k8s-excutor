@@ -15,7 +15,7 @@ class PortNamespaceFileDaoTest(unittest.TestCase):
 
 
     def testSetObj(self):
-        print ""
+        print "Test class : PortNamespaceFileDao ,function : setObj"
         testFilePath = "/tmp/"
 
         pnfDao = JsonFileDao()
@@ -29,7 +29,7 @@ class PortNamespaceFileDaoTest(unittest.TestCase):
 
         assert resultJson['name'] == jsonDict['name']
 
-
+        print "test pass!"
 
 
 

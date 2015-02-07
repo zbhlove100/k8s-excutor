@@ -11,18 +11,19 @@ class ContainerOperationRequestParser(object):
         requestDataDict = json.loads(requestData)
         targetType = requestData['type']
         if targetType == "pod":
-            self.parsePodModel(requestData)
+            self.parsePodModel(requestDataDict)
         elif targetType == "service":
-            self.parseServiceModel(requestData)
+            self.parseServiceModel(requestDataDict)
         elif targetType == "replicationController":
-            self.parseReplicationControllerModel(requestData)
+            self.parseReplicationControllerModel(requestDataDict)
         return result
 
-    def parsePodModel(self,podRequestData):
+    def parsePodModel(self, podRequestDataDict):
+
         return
 
-    def parseServiceModel(self,serviceRequestData):
+    def parseServiceModel(self, serviceRequestDataDict):
         return
 
-    def parseReplicationControllerModel(self,replicationControllerRequestData):
+    def parseReplicationControllerModel(self, replicationControllerRequestDataDict):
         return

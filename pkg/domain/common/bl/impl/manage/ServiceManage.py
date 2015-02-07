@@ -9,14 +9,27 @@ class ServiceManage(object):
         self.configDao = JsonFileDao()
         pass
 
-    def createService(self, serviceRequestData):
+    def createService(self, serviceRequest):
 
-        generator = GenerateConfig(serviceRequestData, self.configDao)
-        serviceConfigFile = generator.generateJson()
-        self.kubenetesClient.createResource(serviceConfigFile)
+
+        self.kubenetesClient.createResource(serviceRequest)
         pass
 
-    def deleteService(self, serviceRequestData):
-        podname = serviceRequestData.getId()
-        result = self.kubenetesClient.deleteResource(podname)
+    def deleteService(self, serviceRequest):
+
+        result = self.kubenetesClient.deleteResource(serviceRequest)
+        return result
+
+    def queryService(self, serviceRequest):
+        result = self.kubenetesClient.querryResource(serviceRequest)
+        return result
+
+    def queryServicesInFarm(self, serviceRequest):
+        labelName = "farmLabel"
+        result = self.kubenetesClient.querryResourceByLabel(serviceRequest, labelName)
+        return result
+
+    def queryServicesInRole(self, serviceRequest):
+        labelName = "roleLabel"
+        result = self.kubenetesClient.querryResourceByLabel(serviceRequest, labelName)
         return result
