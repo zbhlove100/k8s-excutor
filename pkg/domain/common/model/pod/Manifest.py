@@ -1,5 +1,5 @@
 __author__ = 'zhangbohan'
-
+from pkg.domain.common.model.pod.Containers import Containers
 import json
 
 
@@ -28,8 +28,28 @@ class Manifest(object):
         pass
 
     @staticmethod
-    def fromDict(buildDict):
-        pass
+    def fromDict(manifestDict):
+        if manifestDict.has_key("version") :
+            version = manifestDict["version"]
+        else :
+            version = None
+
+        if manifestDict.has_key("id") :
+            id = manifestDict["id"]
+        else :
+            id = None
+
+        if manifestDict.has_key("volumes") :
+            volumes = manifestDict["volumes"]
+        else :
+            volumes = None
+
+        if manifestDict.has_key("containers") :
+            tmpContainers = manifestDict["containers"]
+            containers = Containers.fromDict(tmpContainers)
+        else :
+            containers = None
+        return Manifest(version, id, volumes, containers)
 
     def toDict(self):
         manifestDict = {}

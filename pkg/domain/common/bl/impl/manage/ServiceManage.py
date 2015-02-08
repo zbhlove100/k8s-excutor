@@ -4,32 +4,37 @@ from pkg.domain.common.dao.JsonFileDao import JsonFileDao
 
 
 class ServiceManage(object):
-    def __init__(self, kubenetesClient=None):
+    def __init__(self,kubenetesClient=None):
         self.kubenetesClient = kubenetesClient
-        self.configDao = JsonFileDao()
         pass
 
-    def createService(self, serviceRequest):
-
-
-        self.kubenetesClient.createResource(serviceRequest)
+    def createService(self,serviceRequest):
+        ServiceJson = serviceRequest.toJSON()
+        self.kubenetesClient.createService(ServiceJson)
         pass
 
     def deleteService(self, serviceRequest):
-
-        result = self.kubenetesClient.deleteResource(serviceRequest)
+        ServiceId = serviceRequest.getId()
+        result = self.kubenetesClient.deleteService(ServiceId)
         return result
 
     def queryService(self, serviceRequest):
-        result = self.kubenetesClient.querryResource(serviceRequest)
+        ServiceId = serviceRequest.getId()
+        result = self.kubenetesClient.queryService(ServiceId)
         return result
 
     def queryServicesInFarm(self, serviceRequest):
+        labels = serviceRequest.getLabels()
         labelName = "farmLabel"
-        result = self.kubenetesClient.querryResourceByLabel(serviceRequest, labelName)
+        labelValues = labels[labelName]
+        queryLabels = "%s=%s" % (labelName, labelValues)
+        result = self.kubenetesClient.queryServiceByLabel(queryLabels)
         return result
 
     def queryServicesInRole(self, serviceRequest):
+        labels = serviceRequest.getLabels()
         labelName = "roleLabel"
-        result = self.kubenetesClient.querryResourceByLabel(serviceRequest, labelName)
+        labelValues = labels[labelName]
+        queryLabels = "%s=%s" % (labelName, labelValues)
+        result = self.kubenetesClient.queryServiceByLabel(queryLabels)
         return result

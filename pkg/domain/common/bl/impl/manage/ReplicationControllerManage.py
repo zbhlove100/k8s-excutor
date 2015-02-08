@@ -4,29 +4,37 @@ from pkg.domain.common.dao.JsonFileDao import JsonFileDao
 
 
 class ReplicationControllerManage(object):
-    def __init__(self,kubenetesClient=None):
+    def __init__(self, kubenetesClient=None):
         self.kubenetesClient = kubenetesClient
-        self.configDao = JsonFileDao()
         pass
 
-    def createReplicationController(self,replicationRequest):
-        self.kubenetesClient.createResource(replicationRequest)
+    def createReplicationController(self,replicationControllerRequest):
+        replicationControllerJson = replicationControllerRequest.toJSON()
+        self.kubenetesClient.createReplicationController(replicationControllerJson)
         pass
 
-    def deleteReplicationController(self, replicationRequest):
-        result = self.kubenetesClient.deleteResource(replicationRequest)
+    def deleteReplicationController(self, replicationControllerRequest):
+        ReplicationControllerId = replicationControllerRequest.getId()
+        result = self.kubenetesClient.deleteReplicationController(ReplicationControllerId)
         return result
 
-    def queryReplicationController(self, replicationRequest):
-        result = self.kubenetesClient.querryResource(replicationRequest)
+    def queryReplicationController(self, replicationControllerRequest):
+        ReplicationControllerId = replicationControllerRequest.getId()
+        result = self.kubenetesClient.queryReplicationController(ReplicationControllerId)
         return result
 
-    def queryReplicationControllersInFarm(self, replicationRequest):
+    def queryReplicationControllersInFarm(self, replicationControllerRequest):
+        labels = replicationControllerRequest.getLabels()
         labelName = "farmLabel"
-        result = self.kubenetesClient.querryResourceByLabel(replicationRequest, labelName)
+        labelValues = labels[labelName]
+        queryLabels = "%s=%s" % (labelName, labelValues)
+        result = self.kubenetesClient.queryReplicationControllerByLabel(queryLabels)
         return result
 
-    def queryReplicationControllersInRole(self, replicationRequest):
+    def queryReplicationControllersInRole(self, replicationControllerRequest):
+        labels = replicationControllerRequest.getLabels()
         labelName = "roleLabel"
-        result = self.kubenetesClient.querryResourceByLabel(replicationRequest, labelName)
+        labelValues = labels[labelName]
+        queryLabels = "%s=%s" % (labelName, labelValues)
+        result = self.kubenetesClient.queryReplicationControllerByLabel(queryLabels)
         return result

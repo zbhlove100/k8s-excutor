@@ -1,5 +1,6 @@
 __author__ = 'zhangbohan'
 import json
+from pkg.domain.common.model.pod.PodState import PodState
 class Pod(object):
 
     def __init__(self
@@ -19,12 +20,39 @@ class Pod(object):
         pass
 
     @staticmethod
-    def fromJSON(buildJSON):
+    def fromJSON(poddJSON):
         pass
 
     @staticmethod
-    def fromDict(buildDict):
-        pass
+    def fromDict(poddDict):
+        if poddDict.has_key("id") :
+            id = poddDict["id"]
+        else :
+            id = None
+
+        if poddDict.has_key("apiVersion") :
+            apiVersion = poddDict["apiVersion"]
+        else :
+            apiVersion = None
+
+        if poddDict.has_key("labels") :
+            labels = poddDict["labels"]
+        else :
+            labels = None
+
+        if poddDict.has_key("namespace") :
+            namespace = poddDict["namespace"]
+        else :
+            id = None
+
+        if poddDict.has_key("desiredState") :
+            tmpDesiredState = poddDict["desiredState"]
+            desiredState = PodState.fromDict(tmpDesiredState)
+        else :
+            desiredState = None
+
+
+        return Pod(id, apiVersion, desiredState, labels, namespace)
 
     def toDict(self):
         podDict = {

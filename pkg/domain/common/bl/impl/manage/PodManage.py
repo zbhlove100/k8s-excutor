@@ -7,25 +7,32 @@ class PodManage(object):
         pass
 
     def createPod(self,podRequest):
-
-        self.kubenetesClient.createResource(podRequest)
+        podJson = podRequest.toJSON()
+        self.kubenetesClient.createPod(podJson)
         pass
 
     def deletePod(self, podRequest):
-
-        result = self.kubenetesClient.deleteResource(podRequest)
+        podId = podRequest.getId()
+        result = self.kubenetesClient.deletePod(podId)
         return result
 
-    def queryPod(self, podReqest):
-        result = self.kubenetesClient.queryResource(podReqest)
+    def queryPod(self, podRequest):
+        podId = podRequest.getId()
+        result = self.kubenetesClient.queryPod(podId)
         return result
 
-    def queryPodsInFarm(self, podReqest):
+    def queryPodsInFarm(self, podRequest):
+        labels = podRequest.getLabels()
         labelName = "farmLabel"
-        result = self.kubenetesClient.queryResourceByLabel(podReqest, labelName)
+        labelValues = labels[labelName]
+        queryLabels = "%s=%s" % (labelName, labelValues)
+        result = self.kubenetesClient.queryPodByLabel(queryLabels)
         return result
 
-    def queryPodsInRole(self, podReqest):
+    def queryPodsInRole(self, podRequest):
+        labels = podRequest.getLabels()
         labelName = "roleLabel"
-        result = self.kubenetesClient.queryResourceByLabel(podReqest, labelName)
+        labelValues = labels[labelName]
+        queryLabels = "%s=%s" % (labelName, labelValues)
+        result = self.kubenetesClient.queryPodByLabel(queryLabels)
         return result

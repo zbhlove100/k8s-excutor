@@ -32,8 +32,48 @@ class Containers(object):
         pass
 
     @staticmethod
-    def fromDict(buildDict):
-        pass
+    def fromDict(containerDict):
+        if containerDict.has_key("name") :
+            name = containerDict["name"]
+        else :
+            name = None
+
+        if containerDict.has_key("image") :
+            image = containerDict["image"]
+        else :
+            image = None
+
+        if containerDict.has_key("command") :
+            command = containerDict["command"]
+        else :
+            command = None
+
+        if containerDict.has_key("ports") :
+            ports = containerDict["ports"]
+        else :
+            ports = None
+
+        if containerDict.has_key("env") :
+            env = containerDict["env"]
+        else :
+            env = None
+
+        if containerDict.has_key("memory") :
+            memory = containerDict["memory"]
+        else :
+            memory = None
+
+        if containerDict.has_key("cpu") :
+            cpu = containerDict["cpu"]
+        else :
+            cpu = None
+
+        if containerDict.has_key("volumeMounts") :
+            volumeMounts = containerDict["volumeMounts"]
+        else :
+            volumeMounts = None
+
+        return Containers(name, image, command, ports, env, memory, cpu, volumeMounts)
 
     def toDict(self):
         containerDict = {}

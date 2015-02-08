@@ -1,5 +1,5 @@
 __author__ = 'zhangbohan'
-
+from pkg.domain.common.model.pod.Manifest import Manifest
 import json
 
 class PodState(object):
@@ -27,8 +27,33 @@ class PodState(object):
         return build
 
     @staticmethod
-    def fromDict(buildDict):
-        pass
+    def fromDict(PodStateDict):
+        if PodStateDict.has_key("manifest") :
+            tmpManifest = PodStateDict["manifest"]
+            manifest = Manifest.fromDict(tmpManifest)
+        else :
+            manifest = None
+
+        if PodStateDict.has_key("status") :
+            status = PodStateDict["status"]
+        else :
+            status = None
+
+        if PodStateDict.has_key("host") :
+            host = PodStateDict["host"]
+        else :
+            host = None
+
+        if PodStateDict.has_key("hostip") :
+            hostip = PodStateDict["hostip"]
+        else :
+            hostip = None
+
+        if PodStateDict.has_key("podip") :
+            podip = PodStateDict["podip"]
+        else :
+            podip = None
+        return PodState(manifest, status, host, hostip, podip)
 
     def toDict(self):
         podStateDict = {}
