@@ -5,39 +5,19 @@ from pkg.infrastructure.common.generateConfig.GenerateConfig import GenerateConf
 from pkg.infrastructure.common.shell.SimpleCmdExecutor import SimpleCmdExecutor
 
 class KubeletCliClient(IKubernetesClient):
-    def __init__(self,KComandDao):
-        self.KCommandDao = KComandDao
+    KUBERNETES_CREATE_COMMAND = "kubectl create -f %s"
+    KUBERNETES_GET_POD_COMMAND = "kubectl get pod"
+    KUBERNETES_GET_SERVICE_COMMAND = "kubectl get service"
+    KUBERNETES_GET_REPLICATION_COMMAND = "kubectl get replicationcontroller"
+    KUBERNETES_DELETE_POD_COMMAND = "kubectl delete pod %s"
+    KUBERNETES_DELETE_SERVICE_COMMAND = "kubectl delete service %s"
+    KUBERNETES_DELETE_REPLICATION_COMMAND = "kubectl delete replicationcontroller %s"
+    KUBERNETES_QUERY_POD_STATUS_COMMAND = "kubectl get pod -l %s |awk '{print $5}'"
+    def __init__(self):
+
         pass
-    def createResource(self, objModel):
-        generator = GenerateConfig(objModel, self.configDao)
-        podConfigFile = generator.generateJson()
-        cmd = self.KCommandDao.getCreateCommand(podConfigFile)
-        self.operationResponse = SimpleCmdExecutor.executeCmd(cmd)
-        return self.operationResponse
-
-    def deleteResource(self, objModel):
-        kind = objModel.kind
-        result = ""
-        if "pod" == kind:
-            result = self.deletePod(objModel)
-        elif "service" == kind:
-            result = self.deleteService(objModel)
-        elif "replication" == kind:
-            result = self.deleteReplication(objModel)
-
-        return result
-
-    def querryResource(self, objModel):
-        kind = objModel.kind
-        result = ""
-        if "pod" == kind:
-            result = self.queryPodStatus(objModel)
-        elif "service" == kind:
-            result = self.queryService(objModel)
-        elif "replication" == kind:
-            result = self.queryReplication(objModel)
-
-        return result
+    def createPod(self,podModel):
+        return
 
     def deletePod(self, podModel):
         podId = podModel.getId()
@@ -51,16 +31,8 @@ class KubeletCliClient(IKubernetesClient):
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
-    def queryPodStatus(self,podModel):
-        podId = podModel.getId()
-        cmd = "%s|awk '{print $5}'" % self.KCommandDao.getQueryCommand("pod",podId)
-
-        outputresult = SimpleCmdExecutor.executeCmd(cmd)
-        resultArray = outputresult.splitlines()
-        result = {"name":podId,"status":"Error"}
-        if resultArray[1]:
-            result.status = resultArray[1]
-        return result
+    def createService(self,serviceModel):
+        return
 
     def deleteService(self, serviceModel):
         serviceId = serviceModel.getId()
@@ -74,7 +46,10 @@ class KubeletCliClient(IKubernetesClient):
         outputresult = SimpleCmdExecutor.executeCmd(cmd)
         return outputresult
 
-    def deleteReplication(self, replicationControllerModel):
+    def createReplicationController(self,replicationControllerModel):
+        return
+
+    def deleteReplicationController(self, replicationControllerModel):
         replicationControllerModelId = replicationControllerModel.getId()
         cmd = self.KCommandDao.getDeleteCommand("replication", replicationControllerModelId)
         outputresult = SimpleCmdExecutor.executeCmd(cmd)

@@ -44,6 +44,7 @@ class Service(object):
             "containerPort": self.containerPort,
             "port": self.port,
             "namespace": self.namespace,
+            "publicIPs": self.publicIPs,
             "labels": self.labels
         }
         if None != self.publicIPs:
@@ -108,4 +109,8 @@ class Service(object):
     def getPort(self):
         return self.port
 
+    def setPublicIPs(self, publicIPs):
+        self.publicIPs = publicIPs
 
+    def getPublicIPs(self):
+        return self.publicIPs

@@ -3,21 +3,37 @@ import logging, os
 import requests
 logging.basicConfig(filename='/tmp/k8s-excutor.log', level=logging.DEBUG)
 from pkg.infrastructure.integration.kubernetes.IKubernetesClient import IKubernetesClient
-from pkg.infrastructure.common.logger.LoggerFactory import LoggerFactory
 
 
-class KubernetesRestClient(IKubernetesClient):
-    def __init__(self, namespace=None, authToken=None):
+
+class KubernetesWSClient(IKubernetesClient):
+
+    KUBERNETES_POD_API = "/api/v1beta1/pods"
+    KUBERNETES_SERVICE_API = "/api/v1beta1/pods"
+    KUBERNETES_REPLICATIONCONTROLLER_API= "/api/v1beta1/replicationControllers"
+    KUBERNETES_POD_NAMESPACE_API = "/api/v1beta1/ns/%s/pods"
+    KUBERNETES_SERVICE_NAMESPACE_API = "/api/v1beta1/ns/%s/services"
+    KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API = "/api/v1beta1/ns/%s/replicationControllers"
+    #KUBERNETES_ENDPOINT = "http://54.248.167.168:8080"
+
+    def __init__(self, kubernetesEndpoint, namespace=None, authToken=None ):
         if None != namespace:
             self.namespace = "default"
         else:
             self.namespace = namespace
 
+        self.kubernetesEndpoint = kubernetesEndpoint
+        self.KUBERNETES_POD_NAMESPACE_API = self.KUBERNETES_POD_NAMESPACE_API % self.namespace
+        self.KUBERNETES_SERVICE_NAMESPACE_API = self.KUBERNETES_SERVICE_NAMESPACE_API % self.namespace
+        self.KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API = self.KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API % self.namespace
         logging.debug("Init KubernetesRestClient")
         pass
 
-    def setKubernetesRestDao(self, kubernetesRestDao):
-        self.kubernetesRestDao = kubernetesRestDao
+    def setKubernetesEndpoint(self, kubernetesEndpoint):
+        self.kubernetesEndpoint = kubernetesEndpoint
+
+    def getKubernetesEndpoint(self):
+        return self.kubernetesEndpoint
 
     def setNamespace(self,namespace):
         self.namespace = namespace
@@ -53,17 +69,18 @@ class KubernetesRestClient(IKubernetesClient):
         return str(response.status_code), str(response.text)
 
 
-    def createPod(self, podJson):
+    def createPod(self, podModel):
         requestHeader = {'content-type': 'application/json'}
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        podApi = self.kubernetesRestDao.getPodApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        podApi = self.KUBERNETES_POD_NAMESPACE_API
         requestUrl = "%s%s" % (endpoint, podApi)
+        podJson = podModel.toJSON()
         self.operationResponse = self.sendRequest(requestUrl, "POST", requestHeader, podJson)
         return self.operationResponse
 
     def deletePod(self, podId):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        podApi = self.kubernetesRestDao.getPodApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        podApi = self.KUBERNETES_POD_NAMESPACE_API
         requestUrl = "%s%s/%s" % (endpoint, podApi, podId)
 
         self.operationResponse = self.sendRequest(requestUrl, "DELETE")
@@ -71,8 +88,8 @@ class KubernetesRestClient(IKubernetesClient):
 
     def queryPod(self, podId):
 
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        podApi = self.kubernetesRestDao.getPodApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        podApi = self.KUBERNETES_POD_NAMESPACE_API
         requestUrl = "%s%s/%s" % (endpoint, podApi, podId)
         logging.debug(requestUrl)
         print(requestUrl)
@@ -80,77 +97,75 @@ class KubernetesRestClient(IKubernetesClient):
         return self.operationResponse
 
     def queryPodByLabel(self, labels):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        podApi = self.kubernetesRestDao.getPodApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        podApi = self.KUBERNETES_POD_NAMESPACE_API
         requestUrl = "%s%s?labels=%s" % (endpoint, podApi, labels)
 
         self.operationResponse = self.sendRequest(requestUrl, "GET")
         return self.operationResponse
 
 
-    def createService(self, serviceJson):
+    def createService(self, serviceModel):
         requestHeader = {'content-type': 'application/json'}
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        serviceApi = self.kubernetesRestDao.getServiceApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        serviceApi = self.KUBERNETES_SERVICE_NAMESPACE_API
         requestUrl = "%s%s" % (endpoint, serviceApi)
+        serviceJson = serviceModel.toJSON()
         self.operationResponse = self.sendRequest(requestUrl, "POST", requestHeader, serviceJson)
         return self.operationResponse
 
     def deleteService(self, serviceId):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        serviceApi = self.kubernetesRestDao.getServiceApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        serviceApi = self.KUBERNETES_SERVICE_NAMESPACE_API
         requestUrl = "%s%s/%s" % (endpoint, serviceApi, serviceId)
 
         self.operationResponse = self.sendRequest(requestUrl, "DELETE")
         return self.operationResponse
 
     def queryService(self, serviceId):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        serviceApi = self.kubernetesRestDao.getServiceApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        serviceApi = self.KUBERNETES_SERVICE_NAMESPACE_API
         requestUrl = "%s%s/%s" % (endpoint, serviceApi, serviceId)
 
         self.operationResponse = self.sendRequest(requestUrl, "GET")
         return self.operationResponse
 
     def queryServiceByLabel(self, labels):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        serviceApi = self.kubernetesRestDao.getServiceApiWithNamespcae(self.namespace)
+        endpoint = self.kubernetesEndpoint
+        serviceApi = self.KUBERNETES_SERVICE_NAMESPACE_API
         requestUrl = "%s%s?labels=%s" % (endpoint, serviceApi, labels)
 
         self.operationResponse = self.sendRequest(requestUrl, "GET")
         return self.operationResponse
 
-    def createReplicationController(self, replicationControllerJson):
+    def createReplicationController(self, replicationControllerModel):
         requestHeader = {'content-type': 'application/json'}
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        replicationControllerApi = self.kubernetesRestDao.getReplicationControllerApiWithNamespcae(
-            self.namespace)
+        endpoint = self.kubernetesEndpoint
+        replicationControllerApi = self.KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API
         requestUrl = "%s%s" % (endpoint, replicationControllerApi)
+        replicationControllerJson = replicationControllerModel.toJSON()
         self.operationResponse = self.sendRequest(requestUrl, "POST", requestHeader, replicationControllerJson)
         return self.operationResponse
 
     def deleteReplicationController(self, replicationControllerId):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        replicationControllerApi = self.kubernetesRestDao.getReplicationControllerApiWithNamespcae(
-            self.namespace)
+        endpoint = self.kubernetesEndpoint
+        replicationControllerApi = self.KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API
         requestUrl = "%s%s/%s" % (endpoint, replicationControllerApi, replicationControllerId)
 
         self.operationResponse = self.sendRequest(requestUrl, "DELETE")
         return self.operationResponse
 
     def queryReplicationController(self, replicationControllerId):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        replicationControllerApi = self.kubernetesRestDao.getReplicationControllerApiWithNamespcae(
-            self.namespace)
+        endpoint = self.kubernetesEndpoint
+        replicationControllerApi = self.KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API
         requestUrl = "%s%s/%s" % (endpoint, replicationControllerApi, replicationControllerId)
 
         self.operationResponse = self.sendRequest(requestUrl, "GET")
         return self.operationResponse
 
     def queryReplicationControllerByLabel(self, labels):
-        endpoint = self.kubernetesRestDao.getKubernetesEndpoint()
-        replicationControllerApi = self.kubernetesRestDao.getReplicationControllerApiWithNamespcae(
-            self.namespace)
+        endpoint = self.kubernetesEndpoint
+        replicationControllerApi = self.KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API
         requestUrl = "%s%s?labels=%s" % (endpoint, replicationControllerApi, labels)
 
         self.operationResponse = self.sendRequest(requestUrl, "GET")

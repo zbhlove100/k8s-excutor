@@ -7,8 +7,8 @@ class PodManage(object):
         pass
 
     def createPod(self,podRequest):
-        podJson = podRequest.toJSON()
-        self.kubenetesClient.createPod(podJson)
+
+        self.kubenetesClient.createPod(podRequest)
         pass
 
     def deletePod(self, podRequest):

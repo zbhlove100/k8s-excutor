@@ -1,6 +1,9 @@
 __author__ = 'zhangbohan'
 import json
-from pkg.domain.common.model.pod.PodState import PodState
+
+from pkg.infrastructure.integration.kubernetes.model.pod.PodState import PodState
+
+
 class Pod(object):
 
     def __init__(self
@@ -20,33 +23,35 @@ class Pod(object):
         pass
 
     @staticmethod
-    def fromJSON(poddJSON):
-        pass
+    def fromJSON(podJSON):
+        podDict = json.loads(podJSON)
+        pod = Pod.fromDict(podDict)
+        return pod
 
     @staticmethod
-    def fromDict(poddDict):
-        if poddDict.has_key("id") :
-            id = poddDict["id"]
+    def fromDict(podDict):
+        if podDict.has_key("id") :
+            id = podDict["id"]
         else :
             id = None
 
-        if poddDict.has_key("apiVersion") :
-            apiVersion = poddDict["apiVersion"]
+        if podDict.has_key("apiVersion") :
+            apiVersion = podDict["apiVersion"]
         else :
             apiVersion = None
 
-        if poddDict.has_key("labels") :
-            labels = poddDict["labels"]
+        if podDict.has_key("labels") :
+            labels = podDict["labels"]
         else :
             labels = None
 
-        if poddDict.has_key("namespace") :
-            namespace = poddDict["namespace"]
+        if podDict.has_key("namespace") :
+            namespace = podDict["namespace"]
         else :
-            id = None
+            namespace = None
 
-        if poddDict.has_key("desiredState") :
-            tmpDesiredState = poddDict["desiredState"]
+        if podDict.has_key("desiredState") :
+            tmpDesiredState = podDict["desiredState"]
             desiredState = PodState.fromDict(tmpDesiredState)
         else :
             desiredState = None
@@ -81,7 +86,7 @@ class Pod(object):
     def setDesiredState(self,desiredState):
         self.desiredState = desiredState
 
-    def setLabels(self,labels):
+    def setLabels(self, labels):
         self.labels = labels
 
     def getId(self):

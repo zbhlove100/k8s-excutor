@@ -9,8 +9,7 @@ class ReplicationControllerManage(object):
         pass
 
     def createReplicationController(self,replicationControllerRequest):
-        replicationControllerJson = replicationControllerRequest.toJSON()
-        self.kubenetesClient.createReplicationController(replicationControllerJson)
+        self.kubenetesClient.createReplicationController(replicationControllerRequest)
         pass
 
     def deleteReplicationController(self, replicationControllerRequest):

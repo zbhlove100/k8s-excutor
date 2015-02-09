@@ -1,14 +1,6 @@
 __author__ = 'zhangbohan'
 
 class KubernetesCommandDao(object):
-    KUBERNETES_CREATE_COMMAND = "kubectl create -f %s"
-    KUBERNETES_GET_POD_COMMAND = "kubectl get pod"
-    KUBERNETES_GET_SERVICE_COMMAND = "kubectl get service"
-    KUBERNETES_GET_REPLICATION_COMMAND = "kubectl get replicationcontroller"
-    KUBERNETES_DELETE_POD_COMMAND = "kubectl delete pod %s"
-    KUBERNETES_DELETE_SERVICE_COMMAND = "kubectl delete service %s"
-    KUBERNETES_DELETE_REPLICATION_COMMAND = "kubectl delete replicationcontroller %s"
-    KUBERNETES_QUERY_POD_STATUS_COMMAND = "kubectl get pod -l %s |awk '{print $5}'"
 
     def __init__(self):
         pass

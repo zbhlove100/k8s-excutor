@@ -1,6 +1,8 @@
 __author__ = 'zhangbohan'
-from pkg.domain.common.model.pod.Manifest import Manifest
 import json
+
+from pkg.infrastructure.integration.kubernetes.model.pod import Manifest
+
 
 class PodState(object):
 

@@ -1,26 +1,31 @@
 __author__ = 'zhangbohan'
-from pkg.infrastructure.common.generateConfig import GenerateConfig
-from pkg.domain.common.dao.JsonFileDao import JsonFileDao
-
+from pkg.domain.common.bl.impl.namespace.PortNamespace import PortNamespace
+from pkg.domain.common.dao.namespcaeDao.PortNamespcaeFileDao import PortNamespcaeFileDao
 
 class ServiceManage(object):
     def __init__(self,kubenetesClient=None):
         self.kubenetesClient = kubenetesClient
+        self.portNamespaceDao = PortNamespcaeFileDao()
+        pass
+
+    def setPortNamespaceDap(self,portNamespaceDao):
+        self.portNamespaceDao = portNamespaceDao
         pass
 
     def createService(self,serviceRequest):
-        ServiceJson = serviceRequest.toJSON()
-        self.kubenetesClient.createService(ServiceJson)
+        portNamespace = PortNamespace(self.portNamespaceDao)
+        serviceModel = portNamespace.setServicePublicIpPort(serviceRequest)
+        self.kubenetesClient.createService(serviceModel)
         pass
 
     def deleteService(self, serviceRequest):
-        ServiceId = serviceRequest.getId()
-        result = self.kubenetesClient.deleteService(ServiceId)
+        serviceId = serviceRequest.getId()
+        result = self.kubenetesClient.deleteService(serviceId)
         return result
 
     def queryService(self, serviceRequest):
-        ServiceId = serviceRequest.getId()
-        result = self.kubenetesClient.queryService(ServiceId)
+        serviceId = serviceRequest.getId()
+        result = self.kubenetesClient.queryService(serviceId)
         return result
 
     def queryServicesInFarm(self, serviceRequest):

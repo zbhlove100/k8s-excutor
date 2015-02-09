@@ -1,8 +1,9 @@
 __author__ = 'zhangbohan'
-import unittest,json
+import unittest
+import json
 
 from pkg.domain.common.model.pod.Pod import Pod
-from pkg.domain.common.model.pod.Manifest import Manifest
+from pkg.infrastructure.integration.kubernetes.model.pod import Manifest
 from pkg.domain.common.model.pod.Containers import Containers
 from pkg.domain.common.model.pod.PodState import PodState
 from pkg.infrastructure.common.generateConfig.GenerateConfig import GenerateConfig

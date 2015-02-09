@@ -2,7 +2,6 @@ __author__ = 'zhangbohan'
 
 import random
 import os
-from pkg.infrastructure.common.file.FileUtil import FileUtil
 
 class PortNamespace(object):
     def __init__(self, namespaceDao):
@@ -27,3 +26,9 @@ class PortNamespace(object):
                 result = port
 
         return result
+
+    def setServicePublicIpPort(self, model):
+        hostIps = model.getPublicIPs()
+        port = self.getUnusedPort(hostIps[0])
+        model.setPort(port)
+        return model

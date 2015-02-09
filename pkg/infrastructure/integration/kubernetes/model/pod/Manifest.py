@@ -1,6 +1,7 @@
 __author__ = 'zhangbohan'
-from pkg.domain.common.model.pod.Containers import Containers
 import json
+
+from pkg.infrastructure.integration.kubernetes.model.pod.Containers import Containers
 
 
 class Manifest(object):
