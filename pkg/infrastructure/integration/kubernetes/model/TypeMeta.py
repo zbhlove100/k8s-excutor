@@ -92,6 +92,75 @@ class TypeMeta(object):
                    , namespace
                    , annotations)
 
+    @staticmethod
+    def fromDictToInlineProperty(typeMetaDict):
+        prepertyList = []
+
+        if typeMetaDict.has_key("id"):
+            id = typeMetaDict["id"]
+            prepertyList.append("id")
+        else:
+            id = None
+
+        if typeMetaDict.has_key("apiVersion"):
+            apiVersion = typeMetaDict["apiVersion"]
+            prepertyList.append("apiVersion")
+        else:
+            apiVersion = None
+
+        if typeMetaDict.has_key("kind"):
+            kind = typeMetaDict["kind"]
+            prepertyList.append("kind")
+        else:
+            kind = None
+
+        if typeMetaDict.has_key("uid"):
+            uid = typeMetaDict["uid"]
+            prepertyList.append("uid")
+        else:
+            uid = None
+
+        if typeMetaDict.has_key("creationTimestamp"):
+            creationTimestamp = typeMetaDict["creationTimestamp"]
+            prepertyList.append("creationTimestamp")
+        else:
+            creationTimestamp = None
+
+        if typeMetaDict.has_key("selfLink"):
+            selfLink = typeMetaDict["selfLink"]
+            prepertyList.append("selfLink")
+        else:
+            selfLink = None
+
+        if typeMetaDict.has_key("resourceVersion"):
+            resourceVersion = typeMetaDict["resourceVersion"]
+            prepertyList.append("resourceVersion")
+        else:
+            resourceVersion = None
+
+        if typeMetaDict.has_key("namespace"):
+            namespace = typeMetaDict["namespace"]
+            prepertyList.append("namespace")
+        else:
+            namespace = None
+
+        if typeMetaDict.has_key("annotations"):
+            annotations = typeMetaDict["annotations"]
+            prepertyList.append("annotations")
+        else:
+            annotations = None
+
+        return prepertyList, TypeMeta(
+                   id
+                   , apiVersion
+                   , kind
+                   , uid
+                   , creationTimestamp
+                   , selfLink
+                   , resourceVersion
+                   , namespace
+                   , annotations)
+
     def toDict(self):
         typeMetaDict = {
 
