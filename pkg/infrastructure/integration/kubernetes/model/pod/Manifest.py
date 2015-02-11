@@ -25,8 +25,10 @@ class Manifest(object):
 
 
     @staticmethod
-    def fromJSON(buildJSON):
-        pass
+    def fromJSON(manifestJSON):
+        manifestDict = json.loads(manifestJSON)
+        manifest = Manifest.fromDict(manifestDict)
+        return manifest
 
     @staticmethod
     def fromDict(manifestDict):
@@ -47,7 +49,9 @@ class Manifest(object):
 
         if manifestDict.has_key("containers") :
             tmpContainers = manifestDict["containers"]
-            containers = Containers.fromDict(tmpContainers)
+            containers = []
+            for containerDict in tmpContainers:
+                containers.append(Containers.fromDict(containerDict))
         else :
             containers = None
         return Manifest(version, id, volumes, containers)

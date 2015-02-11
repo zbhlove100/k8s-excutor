@@ -28,6 +28,7 @@ class ContainerOperationRequestHandler(object):
                                                                      , containerOperationRequest.getRoleName()
                                                                      , requestModel)
 
+        #modelWithNsAndLabelsAndId = uNamespace.setModelId(modelWithNsAndLabels)
         self.exucteAction(containerOperationRequest, modelWithNsAndLabels)
 
         pass
@@ -35,7 +36,8 @@ class ContainerOperationRequestHandler(object):
     def parseModel(self, containerOperationRequest):
         requestModel = None
         type = containerOperationRequest.getModelType()
-        dataDict = json.loads(containerOperationRequest.getDataDict())
+
+        dataDict = containerOperationRequest.getDataDict()
         if type == "Pod":
             requestModel = Pod.fromDict(dataDict)
         elif type == "Service":
@@ -89,9 +91,9 @@ class ContainerOperationRequestHandler(object):
         actionKey = kind + containerOperationRequest.getAction()
         excutorDict = actionMappingDict[actionKey]
         excutorInstance = self.createInstance(excutorDict["className"], kubernetesWSClient)
-        excutor = getattr(excutorInstance, excutorDict["methodName"], model)
+        excutor = getattr(excutorInstance, excutorDict["methodName"])
 
-        excutor()
+        excutor(model)
 
 
 

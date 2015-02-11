@@ -30,7 +30,7 @@ class ServiceManage(object):
 
     def queryServicesInFarm(self, serviceRequest):
         labels = serviceRequest.getLabels()
-        labelName = "farmLabel"
+        labelName = "farmlabel"
         labelValues = labels[labelName]
         queryLabels = "%s=%s" % (labelName, labelValues)
         result = self.kubenetesClient.queryServiceByLabel(queryLabels)
@@ -38,7 +38,7 @@ class ServiceManage(object):
 
     def queryServicesInRole(self, serviceRequest):
         labels = serviceRequest.getLabels()
-        labelName = "roleLabel"
+        labelName = "rolelabel"
         labelValues = labels[labelName]
         queryLabels = "%s=%s" % (labelName, labelValues)
         result = self.kubenetesClient.queryServiceByLabel(queryLabels)

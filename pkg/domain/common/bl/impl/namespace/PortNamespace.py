@@ -5,7 +5,7 @@ import os
 
 class PortNamespace(object):
     def __init__(self, namespaceDao):
-        self.namespcaeDao = namespaceDao
+        self.namespaceDao = namespaceDao
         pass
 
     def getRadomPort(self):

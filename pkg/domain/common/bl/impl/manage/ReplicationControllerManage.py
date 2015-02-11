@@ -1,6 +1,5 @@
 __author__ = 'zhangbohan'
-from pkg.infrastructure.common.generateConfig import GenerateConfig
-from pkg.domain.common.dao.JsonFileDao import JsonFileDao
+from pkg.infrastructure.integration.kubernetes.model.replicationController.ReplicationController import ReplicationController
 
 
 class ReplicationControllerManage(object):
@@ -24,7 +23,7 @@ class ReplicationControllerManage(object):
 
     def queryReplicationControllersInFarm(self, replicationControllerRequest):
         labels = replicationControllerRequest.getLabels()
-        labelName = "farmLabel"
+        labelName = "farmlabel"
         labelValues = labels[labelName]
         queryLabels = "%s=%s" % (labelName, labelValues)
         result = self.kubenetesClient.queryReplicationControllerByLabel(queryLabels)
@@ -32,8 +31,17 @@ class ReplicationControllerManage(object):
 
     def queryReplicationControllersInRole(self, replicationControllerRequest):
         labels = replicationControllerRequest.getLabels()
-        labelName = "roleLabel"
+        labelName = "rolelabel"
         labelValues = labels[labelName]
         queryLabels = "%s=%s" % (labelName, labelValues)
         result = self.kubenetesClient.queryReplicationControllerByLabel(queryLabels)
         return result
+
+    def resizeReplicationController(self, replicationControllerRequest, newSize):
+        ReplicationControllerId = replicationControllerRequest.getId()
+        status, result = self.kubenetesClient.queryReplicationController(ReplicationControllerId)
+        if status == 200:
+            recentReplicationControllerModel = ReplicationController.fromJSON(result)
+            resourceVersion = recentReplicationControllerModel.getResourceVersion()
+            replicationControllerRequest.setResourceVersion(resourceVersion)
+            self.kubenetesClient.updateReplicationController(ReplicationControllerId)

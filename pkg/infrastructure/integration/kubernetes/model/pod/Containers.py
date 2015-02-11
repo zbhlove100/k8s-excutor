@@ -28,8 +28,10 @@ class Containers(object):
         pass
 
     @staticmethod
-    def fromJSON(buildJSON):
-        pass
+    def fromJSON(containerJSON):
+        containerDict = json.loads(containerJSON)
+        container = Containers.fromDict(containerDict)
+        return container
 
     @staticmethod
     def fromDict(containerDict):

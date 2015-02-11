@@ -2,24 +2,24 @@ __author__ = 'zhangbohan'
 import json
 
 from pkg.infrastructure.integration.kubernetes.model.pod.PodState import PodState
+from pkg.infrastructure.integration.kubernetes.model.TypeMeta import TypeMeta
 
 
 class Pod(object):
-
     def __init__(self
-                ,id
-                ,apiVersion
-                ,desiredState
-                ,labels
-                ,namespace
+                 , typeMeta=None
+                 , desiredState=None
+                 , currentState=None
+                 , nodeSelector=None
+                 , labels=None
+
 
     ):
-        self.id = id
-        self.kind = "Pod"
-        self.apiVersion = apiVersion
+        self.typeMeta = typeMeta
         self.desiredState = desiredState
+        self.currentState = currentState
+        self.nodeSelector = nodeSelector
         self.labels = labels
-        self.namespace = namespace
         pass
 
     @staticmethod
@@ -30,44 +30,60 @@ class Pod(object):
 
     @staticmethod
     def fromDict(podDict):
-        if podDict.has_key("id") :
-            id = podDict["id"]
-        else :
-            id = None
 
-        if podDict.has_key("apiVersion") :
-            apiVersion = podDict["apiVersion"]
-        else :
-            apiVersion = None
+        if podDict.has_key("typeMeta"):
+            tmpTypeMeta = podDict["typeMeta"]
+            typeMeta = TypeMeta.fromDict(tmpTypeMeta)
+        else:
+            typeMeta = None
 
-        if podDict.has_key("labels") :
-            labels = podDict["labels"]
-        else :
-            labels = None
-
-        if podDict.has_key("namespace") :
-            namespace = podDict["namespace"]
-        else :
-            namespace = None
-
-        if podDict.has_key("desiredState") :
+        if podDict.has_key("desiredState"):
             tmpDesiredState = podDict["desiredState"]
             desiredState = PodState.fromDict(tmpDesiredState)
-        else :
+        else:
             desiredState = None
 
+        if podDict.has_key("currentState"):
+            tmpCurrentState = podDict["currentState"]
+            currentState = PodState.fromDict(tmpCurrentState)
+        else:
+            currentState = None
 
-        return Pod(id, apiVersion, desiredState, labels, namespace)
+        if podDict.has_key("nodeSelector"):
+            nodeSelector = podDict["nodeSelector"]
+        else:
+            nodeSelector = None
+
+        if podDict.has_key("labels"):
+            labels = podDict["labels"]
+        else:
+            labels = None
+
+        return Pod(typeMeta
+                   , desiredState
+                   , currentState
+                   , nodeSelector
+                   , labels
+        )
 
     def toDict(self):
         podDict = {
-            "id" : self.id,
-            "apiVersion" : self.apiVersion,
-            "kind" : self.kind,
-            "desiredState" : self.desiredState.toDict(),
-            "labels" : self.labels,
-            "namespace": self.namespace
+
         }
+        if None != self.typeMeta:
+            podDict["typeMeta"] = self.typeMeta.toDict()
+
+        if None != self.desiredState:
+            podDict["desiredState"] = self.desiredState.toDict()
+
+        if None != self.currentState:
+            podDict["currentState"] = self.currentState.toDict()
+
+        if None != self.nodeSelector:
+            podDict["nodeSelector"] = self.nodeSelector
+
+        if None != self.labels:
+            podDict["labels"] = self.labels
 
 
         return podDict
@@ -77,35 +93,38 @@ class Pod(object):
         pod_json = json.dumps(pod_dict, indent=2)
         return pod_json
 
-    def setId(self,id):
-        self.id = id
+    def setTypeMeta(self, typeMeta):
+        self.typeMeta = typeMeta
 
-    def setApiVersion(self,apiVersion):
-        self.apiVersion = apiVersion
+    def getTypeMeta(self):
+        return self.typeMeta
 
-    def setDesiredState(self,desiredState):
+    def setDesiredState(self, desiredState):
         self.desiredState = desiredState
-
-    def setLabels(self, labels):
-        self.labels = labels
-
-    def getId(self):
-        return self.id
-
-    def getApiVersion(self):
-        return self.apiVersion
 
     def getDesiredState(self):
         return self.desiredState
 
+    def setCurrentState(self, currentState):
+        self.currentState = currentState
+
+    def getCurrentState(self):
+        return self.currentState
+
+    def setNodeSelector(self, nodeSelector):
+        self.nodeSelector = nodeSelector
+
+    def getNodeSelector(self):
+        return self.nodeSelector
+
+    def setLabels(self, labels):
+        self.labels = labels
+
     def getLabels(self):
         return self.labels
 
-    def getKind(self):
-        return self.kind
 
-    def setNamespace(self,namespace):
-        self.namespace = namespace
 
-    def getNamespace(self):
-        return self.namespace
+
+
+

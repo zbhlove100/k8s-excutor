@@ -17,7 +17,7 @@ class KubernetesWSClient(IKubernetesClient):
     #KUBERNETES_ENDPOINT = "http://54.248.167.168:8080"
 
     def __init__(self, kubernetesEndpoint, namespace=None, authToken=None ):
-        if None != namespace:
+        if None == namespace:
             self.namespace = "default"
         else:
             self.namespace = namespace
@@ -54,6 +54,8 @@ class KubernetesWSClient(IKubernetesClient):
                 response = requests.post(requestUrl, data=data, headers=header, timeout=customTimeout)
             elif requestType == "DELETE":
                 response = requests.delete(requestUrl)
+            elif requestType == "PUT":
+                response = requests.put(requestUrl, data=data)
 
             if str(response.status_code) == "200":
                 print "-- OK"
@@ -145,6 +147,16 @@ class KubernetesWSClient(IKubernetesClient):
         requestUrl = "%s%s" % (endpoint, replicationControllerApi)
         replicationControllerJson = replicationControllerModel.toJSON()
         self.operationResponse = self.sendRequest(requestUrl, "POST", requestHeader, replicationControllerJson)
+        return self.operationResponse
+
+    def updateReplicationController(self, replicationControllerModel):
+        requestHeader = {'content-type': 'application/json'}
+        endpoint = self.kubernetesEndpoint
+        replicationControllerId = replicationControllerModel.getId()
+        replicationControllerApi = self.KUBERNETES_REPLICATIONCONTROLLER_NAMESPACE_API
+        requestUrl = "%s%s/%s" % (endpoint, replicationControllerApi, replicationControllerId)
+        replicationControllerJson = replicationControllerModel.toJSON()
+        self.operationResponse = self.sendRequest(requestUrl, "PUT", requestHeader, replicationControllerJson)
         return self.operationResponse
 
     def deleteReplicationController(self, replicationControllerId):

@@ -27,12 +27,65 @@ class Service(object):
         pass
 
     @staticmethod
-    def fromJSON(buildJSON):
-        pass
+    def fromJSON(serviceJSON):
+        serviceDict = json.loads(serviceJSON)
+        service = Service.fromDict(serviceDict)
+        return service
 
     @staticmethod
-    def fromDict(buildDict):
-        pass
+    def fromDict(serviceDict):
+        if serviceDict.has_key("id") :
+            id = serviceDict["id"]
+        else :
+            id = None
+
+        if serviceDict.has_key("apiVersion") :
+            apiVersion = serviceDict["apiVersion"]
+        else :
+            apiVersion = None
+
+        if serviceDict.has_key("kind") :
+            kind = serviceDict["kind"]
+        else :
+            kind = None
+
+        if serviceDict.has_key("selector") :
+            selector = serviceDict["selector"]
+        else :
+            selector = None
+
+        if serviceDict.has_key("protocol") :
+            protocol = serviceDict["protocol"]
+        else :
+            protocol = None
+
+        if serviceDict.has_key("containerPort") :
+            containerPort = serviceDict["containerPort"]
+        else :
+            containerPort = None
+
+        if serviceDict.has_key("port") :
+            port = serviceDict["port"]
+        else :
+            port = None
+
+        if serviceDict.has_key("namespace") :
+            namespace = serviceDict["namespace"]
+        else :
+            namespace = None
+
+        if serviceDict.has_key("publicIPs") :
+            publicIPs = serviceDict["publicIPs"]
+        else :
+            publicIPs = None
+
+        if serviceDict.has_key("labels") :
+            labels = serviceDict["labels"]
+        else :
+            labels = None
+
+        service = Service(id,apiVersion,selector,protocol,containerPort,port,namespace,publicIPs,labels)
+        return service
 
     def toDict(self):
         serviceDict = {
@@ -44,12 +97,12 @@ class Service(object):
             "containerPort": self.containerPort,
             "port": self.port,
             "namespace": self.namespace,
-            "publicIPs": self.publicIPs,
-            "labels": self.labels
         }
         if None != self.publicIPs:
             serviceDict["publicIPs"] = self.publicIPs
 
+        if None != self.labels:
+            serviceDict["labels"] = self.labels
         return serviceDict
 
     def toJSON(self):
