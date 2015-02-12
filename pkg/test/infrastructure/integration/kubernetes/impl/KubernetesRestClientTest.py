@@ -121,7 +121,6 @@ class kubernetesWSClientTest(unittest.TestCase):
         kubernetesWSClient1 = KubernetesWSClient(self.KUBERNETES_ENDPOINT)
         serviceJson = """
             {
-
               "id": "guest-ook-user-ser-ice",
               "kind": "Service",
               "apiVersion": "v1beta2",

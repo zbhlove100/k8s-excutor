@@ -18,13 +18,7 @@ class ContainerOperationRequestHandlerTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-    def testDeploySuit(self):
-        print """Test class : ContainerOperationRequestHandler
-                 function : handle
-              """
-
-        podTaskRequest = """
+    mysqlPodTaskRequest = """
 
             {
              "modelType": "Pod",
@@ -61,9 +55,134 @@ class ContainerOperationRequestHandlerTest(unittest.TestCase):
          }
 
         """
+    CREATE_MYSQL_SERVICE_TASK = """
+     {
+             "modelType": "Service",
+                "action": "Create",
+                "dataDict" : {
+                      "id": "suit-test-mysqlservice",
+                      "kind": "Service",
+                      "apiVersion": "v1beta2",
+                      "selector": {
+                        "name": "user1-farm1-role1-suit-test-createpod"
+                      },
+                      "protocol": "TCP",
+                      "containerPort": 3306,
+                      "publicIPs":["10.184.28.57"],
+                      "port": 3306
+                    },
+                "userId" : "user1",
+                "farmName" : "farm1",
+                "roleName" : "role1",
+                "targetEndpoint" : "http://54.248.167.168:8080"
+         }
+
+    """
+    CREATE_WORDPRESS_REPLICATION_CONTROLLER_TASK = """
+     {
+             "modelType": "ReplicationController",
+                "action": "Create",
+                "dataDict" : {
+                      "id": "suit-test-wordpress-replication-controller",
+                      "kind": "ReplicationController",
+                      "apiVersion": "v1beta2",
+                      "desiredState": {
+                        "replicas": 1,
+                        "replicaSelector": {"name": "suit-test-wordpress-replication-controller"},
+                        "podTemplate": {
+                          "desiredState": {
+                             "manifest": {
+                               "version": "v1beta2",
+                               "id": "suit-test-wordpress-replication-controller",
+                               "containers": [{
+                                 "name": "slave",
+                                 "image": "zbhlove100/wordpress",
+                                 "cpu": 200,
+                                 "ports": [{"containerPort": 80}],
+                                  "command":["apache2-foreground","10.0.99.214:33727","cloudpi"]
+                               }]
+                             }
+                           },
+                           "labels": {
+                             "name": "suit-test-wordpress-replication-controller",
+                             "uses": "mysql"
+                           }
+                          }
+                       },
+                      "labels": {"name": "suit-test-wordpress-replication-controller"}
+                    },
+                "userId" : "user1",
+                "farmName" : "farm1",
+                "roleName" : "role1",
+                "targetEndpoint" : "http://54.248.167.168:8080"
+         }
+
+    """
+    CREATE_WORDPRESS_SERVICE_TASK = """
+     {
+             "modelType": "Service",
+                "action": "Create",
+                "dataDict" : {
+                      "id": "suit-test-wd-service",
+                      "kind": "Service",
+                      "apiVersion": "v1beta2",
+                      "selector": {
+                        "name": "suit-test-wordpress-replication-controller"
+                      },
+                      "protocol": "TCP",
+                      "containerPort": 80,
+                      "publicIPs":["10.184.28.57"],
+                      "port": 8080
+                    },
+                "userId" : "user1",
+                "farmName" : "farm1",
+                "roleName" : "role1",
+                "targetEndpoint" : "http://54.248.167.168:8080"
+         }
+
+    """
+    DELETE_MYSQL_SERVICE_TASK = """
+    {
+             "modelType": "Service",
+                "action": "Delete",
+                "dataDict" : {
+                      "id": "suit-test-mysqlservice",
+                      "kind": "Service",
+                      "apiVersion": "v1beta2"
+
+                    },
+                "userId" : "user1",
+                "farmName" : "farm1",
+                "roleName" : "role1",
+                "targetEndpoint" : "http://54.248.167.168:8080"
+         }
+    """
+
+    DELETE_MYSQL_POD_TASK = """
+    {
+             "modelType": "Pod",
+                "action": "Delete",
+                "dataDict" : {
+                      "id": "suit-test-createpod",
+                      "kind": "Pod",
+                      "apiVersion": "v1beta2"
+
+                    },
+                "userId" : "user1",
+                "farmName" : "farm1",
+                "roleName" : "role1",
+                "targetEndpoint" : "http://54.248.167.168:8080"
+         }
+    """
+    def testDeploySuit(self):
+        print """Test class : ContainerOperationRequestHandler
+                 function : handle
+              """
+
+
 
         corh = ContainerOperationRequestHandler()
-        corh.handle(podTaskRequest)
+        corh.handle(self.mysqlPodTaskRequest)
 
         print "test pass!"
 

@@ -18,11 +18,10 @@ class PodTest(unittest.TestCase):
         """
         podJson = """
             {
-              "typeMeta":{
-                    "id": "kubernetes-client-test-createpod",
-                    "kind": "Pod",
-                    "apiVersion": "v1beta2"
-              },
+
+            "id": "kubernetes-client-test-createpod",
+            "kind": "Pod",
+            "apiVersion": "v1beta2",
               "desiredState": {
                 "manifest": {
                   "version": "v1beta2",

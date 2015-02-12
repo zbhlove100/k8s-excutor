@@ -45,8 +45,6 @@ class Pod(object):
 
     @staticmethod
     def fromDict(podDict):
-
-
         if podDict.has_key("desiredState"):
             tmpDesiredState = podDict["desiredState"]
             desiredState = PodState.fromDict(tmpDesiredState)
@@ -113,25 +111,25 @@ class Pod(object):
             annotations = podDict["annotations"]
         else:
             annotations = None
-            
-        return Pod(id
-                   , apiVersion
-                   , kind
-                   , uid
-                   , creationTimestamp
-                   , selfLink
-                   , resourceVersion
-                   , namespace
-                   , annotations
-                   , desiredState
-                   , currentState
-                   , nodeSelector
-                   , labels
-        )
+        pod = Pod(desiredState
+                  , currentState
+                  , nodeSelector
+                  , labels
+                  , id
+                  , apiVersion
+                  , kind
+                  , uid
+                  , creationTimestamp
+                  , selfLink
+                  , resourceVersion
+                  , namespace
+                  , annotations
+                  )
+
+        return pod
 
     def toDict(self):
         podDict = {
-
         }
 
         if None != self.desiredState:
@@ -172,8 +170,6 @@ class Pod(object):
 
         if None != self.annotations:
             podDict["annotations"] = self.annotations
-
-
         return podDict
 
     def toJSON(self):

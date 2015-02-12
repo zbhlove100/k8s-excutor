@@ -101,7 +101,10 @@ class ReplicationController(object):
         else:
             annotations = None
 
-        return ReplicationController(id
+        return ReplicationController(desiredState
+                   , currentState
+                   , labels
+                   , id
                    , apiVersion
                    , kind
                    , uid
@@ -110,9 +113,7 @@ class ReplicationController(object):
                    , resourceVersion
                    , namespace
                    , annotations
-                   , desiredState
-                   , currentState
-                   , labels
+
         )
 
     def toDict(self):

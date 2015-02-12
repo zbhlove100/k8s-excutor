@@ -28,12 +28,23 @@ class UserNamespace(object):
         return kind
     def setModelLabelsAndNamespace(self, userId, farmName, roleName, model):
         #modelKind = model.getKind()
+        labels = model.getLabels()
+
+
         namespace = self.getUserNamespace(userId)
         farmLabel = self.getFarmLabel(userId, farmName)
         roleLabel = self.getRoleLabel(userId, farmName, roleName)
-        labels = {}
+
+        if None == labels:
+            labels = {}
+        else :
+            nameLabel = labels['name']
+            nameLabel = "%s-%s" % (roleLabel, nameLabel)
+            labels['name'] = nameLabel
+
         labels['farmlabel'] = farmLabel
         labels['rolelabel'] = roleLabel
+
         model.setNamespace(namespace)
         model.setLabels(labels)
 
