@@ -75,25 +75,26 @@ class ContainerOperationRequestHandler(object):
             "ServiceCreate": {"className": "pkg.domain.common.bl.impl.manage.ServiceManage.ServiceManage",
                               "methodName": "createService"},
             "ServiceDelete": {"className": "pkg.domain.common.bl.impl.manage.ServiceManage.ServiceManage",
-                              "methodName": "createService"},
+                              "methodName": "deleteService"},
             "ServiceQuery": {"className": "pkg.domain.common.bl.impl.manage.ServiceManage.ServiceManage",
-                             "methodName": "createService"},
+                             "methodName": "queryService"},
             "ReplicationControllerCreate": {
                 "className": "pkg.domain.common.bl.impl.manage.ReplicationControllerManage.ReplicationControllerManage"
                 , "methodName": "createReplicationController"},
             "ReplicationControllerDelete": {
                 "className": "pkg.domain.common.bl.impl.manage.ReplicationControllerManage.ReplicationControllerManage",
-                "methodName": "createReplicationController"},
+                "methodName": "deleteReplicationController"},
             "ReplicationControllerQuery": {
                 "className": "pkg.domain.common.bl.impl.manage.ReplicationControllerManage.ReplicationControllerManage",
-                "methodName": "createReplicationController"}
+                "methodName": "queryReplicationController"}
         }
         actionKey = kind + containerOperationRequest.getAction()
         excutorDict = actionMappingDict[actionKey]
         excutorInstance = self.createInstance(excutorDict["className"], kubernetesWSClient)
         excutor = getattr(excutorInstance, excutorDict["methodName"])
 
-        excutor(model)
+        result = excutor(model)
+        print result
 
 
 

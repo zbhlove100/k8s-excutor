@@ -11,11 +11,11 @@ class Containers(object):
                 ,memory=None
                 ,cpu=None
                 ,volumeMounts=None
-                #,livenessProbe=None
-                #,lifecycle=None
+                ,workingDir=None
+                ,imagePullPolicy=None
+                ,restartPolicy=None
                 #,terminationMessagePath=None
                 #,privileged=None
-                #,imagePullPolicy=None
     ):
         self.name = name
         self.image = image
@@ -25,6 +25,9 @@ class Containers(object):
         self.memory = memory
         self.cpu = cpu
         self.volumeMounts = volumeMounts
+        self.workingDir = workingDir
+        self.imagePullPolicy = imagePullPolicy
+        self.restartPolicy = restartPolicy
         pass
 
     @staticmethod
@@ -75,7 +78,22 @@ class Containers(object):
         else :
             volumeMounts = None
 
-        return Containers(name, image, command, ports, env, memory, cpu, volumeMounts)
+        if containerDict.has_key("workingDir") :
+            workingDir = containerDict["workingDir"]
+        else :
+            workingDir = None
+
+        if containerDict.has_key("imagePullPolicy") :
+            imagePullPolicy = containerDict["imagePullPolicy"]
+        else :
+            imagePullPolicy = None
+
+        if containerDict.has_key("restartPolicy") :
+            restartPolicy = containerDict["restartPolicy"]
+        else :
+            restartPolicy = None
+
+        return Containers(name, image, command, ports, env, memory, cpu, volumeMounts, workingDir, imagePullPolicy, restartPolicy)
 
     def toDict(self):
         containerDict = {}

@@ -47,7 +47,7 @@ class Manifest(object):
         else :
             volumes = None
 
-        if manifestDict.has_key("containers") :
+        if manifestDict.has_key("containers") and None!=manifestDict["containers"] :
             tmpContainers = manifestDict["containers"]
             containers = []
             for containerDict in tmpContainers:

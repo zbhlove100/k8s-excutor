@@ -55,6 +55,22 @@ class ContainerOperationRequestHandlerTest(unittest.TestCase):
          }
 
         """
+    QUERY_MYSQL_POD_TASK = """
+    {
+             "modelType": "Pod",
+                "action": "Query",
+                "dataDict" : {
+                      "id": "suit-test-createpod",
+                      "kind": "Pod",
+                      "apiVersion": "v1beta2"
+
+                    },
+                "userId" : "user1",
+                "farmName" : "farm1",
+                "roleName" : "role1",
+                "targetEndpoint" : "http://54.248.167.168:8080"
+         }
+    """
     CREATE_MYSQL_SERVICE_TASK = """
      {
              "modelType": "Service",
@@ -131,7 +147,7 @@ class ContainerOperationRequestHandlerTest(unittest.TestCase):
                       },
                       "protocol": "TCP",
                       "containerPort": 80,
-                      "publicIPs":["10.184.28.57"],
+                      "publicIPs":["10.186.27.208"],
                       "port": 8080
                     },
                 "userId" : "user1",
@@ -141,6 +157,24 @@ class ContainerOperationRequestHandlerTest(unittest.TestCase):
          }
 
     """
+
+    DELETE_WORDPRESS_SERVICE_TASK = """
+    {
+             "modelType": "Service",
+                "action": "Delete",
+                "dataDict" : {
+                      "id": "suit-test-wd-service",
+                      "kind": "Service",
+                      "apiVersion": "v1beta2"
+
+                    },
+                "userId" : "user1",
+                "farmName" : "farm1",
+                "roleName" : "role1",
+                "targetEndpoint" : "http://54.248.167.168:8080"
+         }
+    """
+
     DELETE_MYSQL_SERVICE_TASK = """
     {
              "modelType": "Service",
@@ -182,7 +216,7 @@ class ContainerOperationRequestHandlerTest(unittest.TestCase):
 
 
         corh = ContainerOperationRequestHandler()
-        corh.handle(self.mysqlPodTaskRequest)
+        corh.handle(self.QUERY_MYSQL_POD_TASK)
 
         print "test pass!"
 
