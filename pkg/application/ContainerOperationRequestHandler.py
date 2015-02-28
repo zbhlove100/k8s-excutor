@@ -29,9 +29,9 @@ class ContainerOperationRequestHandler(object):
                                                                      , requestModel)
 
         #modelWithNsAndLabelsAndId = uNamespace.setModelId(modelWithNsAndLabels)
-        self.exucteAction(containerOperationRequest, modelWithNsAndLabels)
+        result = self.exucteAction(containerOperationRequest, modelWithNsAndLabels)
 
-        pass
+        return result
 
     def parseModel(self, containerOperationRequest):
         requestModel = None
@@ -94,7 +94,7 @@ class ContainerOperationRequestHandler(object):
         excutor = getattr(excutorInstance, excutorDict["methodName"])
 
         result = excutor(model)
-        print result
+        return result
 
 
 

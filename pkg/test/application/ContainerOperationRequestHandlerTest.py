@@ -216,8 +216,8 @@ class ContainerOperationRequestHandlerTest(unittest.TestCase):
 
 
         corh = ContainerOperationRequestHandler()
-        corh.handle(self.QUERY_MYSQL_POD_TASK)
-
+        result = corh.handle(self.QUERY_MYSQL_POD_TASK)
+        print result
         print "test pass!"
 
 
